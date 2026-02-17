@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="default_receivable_account" model="ir.ui.view">
+            <field name="name">default.receivable.account</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="account.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//block[@id='default_accounts']" position="inside">
+                    <setting string="Default Receivable Account"
+                             help="This account will be applied as the receivable account for all customers.">
+                        <div class="content-group">
+                            <div class="row mt16">
+                                <label for="partner_receivable_account_id" class="col-lg-3 o_light_label"/>
+                                <field name="partner_receivable_account_id"/>
+                            </div>
+                        </div>
+                    </setting>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
