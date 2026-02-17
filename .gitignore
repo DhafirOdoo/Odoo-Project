@@ -1,0 +1,9 @@
+*.pyc
+__pycache__/
+*.log
+*.sqlite3
+*.pyo
+*.swp
+.sessions/
+node_modules/
+.DS_Store
