@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="request_user_rule" model="ir.rule">
+            <field name="name">Employee sees own request</field>
+            <field name="model_id" ref="model_employee_request"/>
+            <field name="groups" eval="[(4, ref('request.request_user'))]"/>
+            <field name="domain_force">
+                [('employee_id.user_id', '=', user.id)]
+            </field>
+        </record>
+        <record id="request_approver_rule" model="ir.rule">
+            <field name="name">Approver: Assigned Requests</field>
+            <field name="model_id" ref="model_employee_request"/>
+            <field name="groups" eval="[(4, ref('request.request_approver'))]"/>
+            <field name="domain_force">
+                [('approver_id.user_id', '=', user.id)]
+            </field>
+        </record>
+        <record id="request_admin_rule" model="ir.rule">
+            <field name="name">Admin: All Requests</field>
+            <field name="model_id" ref="model_employee_request"/>
+            <field name="groups" eval="[(4, ref('request.request_admin'))]"/>
+            <field name="domain_force">
+                [(1,'=',1)]
+            </field>
+        </record>
+    </data>
+</odoo>

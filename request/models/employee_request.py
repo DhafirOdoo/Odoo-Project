@@ -1,0 +1,112 @@
+from docutils.nodes import option
+
+from odoo import api, fields, models
+from odoo.exceptions import UserError
+
+
+class EmployeeRequest(models.Model):
+    _name = 'employee.request'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
+    _description = 'Employee Request'
+    _rec_name = 'employee_id'
+
+    employee_id = fields.Many2one(
+        'hr.employee',
+        string='Employee',
+        default=lambda self: self.env.user.employee_id,
+        required=True, readonly=True)
+    req_reason = fields.Text(string='Description', required=True)
+    login_date_time = fields.Datetime(
+        string='Date & Time',
+        required=True,
+        default=fields.Datetime.now
+    )
+    status = fields.Selection([
+        ('draft', 'Draft'),
+        ('submitted', 'Submitted'),
+        ('approved', 'Approved'),
+        ('rejected', 'Rejected'),
+    ], default='draft')
+    request_type_id = fields.Many2one(
+        'request.type',
+        string="Request Type",
+        required=True,
+    )
+    approver_id = fields.Many2one(related='request_type_id.approver_id')
+    previous_request_ids = fields.Many2many(
+        'employee.request',
+        string="Previous Approved Requests",
+        compute='_compute_previous_requests',
+        store=False
+    )
+
+    @api.depends('employee_id')
+    def _compute_previous_requests(self):
+        for rec in self:
+            if not rec.employee_id:
+                rec.previous_request_ids = False
+                continue
+
+            domain = [
+                ('employee_id', '=', rec.employee_id.id),
+                ('status', '=', 'approved'),
+            ]
+            if rec._origin.id:
+                domain.append(('id', '<', rec._origin.id))
+
+            previous = self.env['employee.request'].search(
+                domain,
+                order="id desc"
+            )
+
+            rec.previous_request_ids = previous
+
+
+    def button_submit(self):
+        for rec in self:
+            rec.status = 'submitted'
+
+            rec.message_subscribe(partner_ids=[rec.approver_id.user_partner_id.id])
+
+            rec.message_post(
+                body=f"{rec.request_type_id.request_name} has been submitted by {rec.employee_id.name}.",
+                partner_ids=[rec.approver_id.user_partner_id.id],
+                message_type='notification',
+                subtype_xmlid='mail.mt_note',
+            )
+            rec.activity_schedule(
+                'mail.mail_activity_data_todo',
+                user_id=rec.approver_id.user_id.id,
+                note=f"{rec.request_type_id.request_name} requires your approval."
+            )
+
+    def button_approve(self):
+        for rec in self:
+            rec.status = 'approved'
+
+            requester_user = rec.employee_id.user_id
+            if not requester_user:
+                raise UserError("Requester employee has no linked user")
+
+            rec.message_subscribe(partner_ids=[requester_user.partner_id.id])
+
+            rec.message_post(
+                body=f"Your {rec.request_type_id.request_name} has been approved.",
+                partner_ids=[requester_user.partner_id.id]
+            )
+
+
+    def button_reject(self):
+        for rec in self:
+            rec.status = 'rejected'
+
+            requester_user = rec.employee_id.user_id
+            if not requester_user:
+                raise UserError("Requester employee has no linked user")
+
+            rec.message_subscribe(partner_ids=[requester_user.partner_id.id])
+
+            rec.message_post(
+                body=f"Your {rec.request_type_id.request_name} has been rejected.",
+                partner_ids=[requester_user.partner_id.id]
+            )

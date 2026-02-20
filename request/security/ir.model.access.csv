@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_late_login_request_admin,access_late_login_request_admin,model_employee_request,request_admin,1,1,1,1
+access_request_type_admin,access_request_type_admin,model_request_type,request_admin,1,1,1,1
+
+access_late_login_request_approver,access_late_login_request_approver,model_employee_request,request_approver,1,1,1,1
+access_request_type_approver,access_request_type_approver,model_request_type,request_approver,1,1,1,1
+
+
+access_employee_request_user,access_employee_request_user,model_employee_request,request_user,1,1,1,1
+access_request_type_user,access_request_type_user,model_request_type,request_user,1,1,1,1

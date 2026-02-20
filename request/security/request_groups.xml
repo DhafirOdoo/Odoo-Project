@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="request_access" model="ir.module.category">
+            <field name="name">Employee Request</field>
+        </record>
+        <record id="request_user" model="res.groups">
+            <field name="name">User</field>
+            <field name="category_id" ref="request.request_access"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        <record id="request_approver" model="res.groups">
+            <field name="name">Approver</field>
+            <field name="category_id" ref="request.request_access"/>
+            <field name="implied_ids" eval="[(4, ref('request.request_user'))]"/>
+        </record>
+        <record id="request_admin" model="res.groups">
+            <field name="name">Admin</field>
+            <field name="category_id" ref="request.request_access"/>
+            <field name="implied_ids" eval="[(4, ref('request.request_approver'))]"/>
+            <field name="users" eval="[(4, ref('base.user_admin'))]"/>
+        </record>
+    </data>
+</odoo>

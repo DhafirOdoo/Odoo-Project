@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="employee_request_list" model="ir.ui.view">
+            <field name="name">employee.request.list</field>
+            <field name="model">employee.request</field>
+            <field name="arch" type="xml">
+                <tree default_order="login_date_time desc">
+                    <field name="employee_id"/>
+                    <field name="request_type_id"/>
+                    <field name="req_reason"/>
+                    <field name="login_date_time"/>
+                    <field name="status" widget="badge"
+                           decoration-success="status == 'approved'"
+                           decoration-danger="status == 'rejected'"
+                           decoration-info="status == 'submitted'"
+                           decoration-muted="status == 'draft'"/>
+                </tree>
+            </field>
+        </record>
+        <record id="employee_request_form" model="ir.ui.view">
+            <field name="name">employee.request.form</field>
+            <field name="model">employee.request</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="button_submit" class="btn btn-primary" type="object" string="Submit"
+                                invisible="status != 'draft'"/>
+                        <button name="button_approve" class="btn btn-primary" type="object" string="Approve"
+                                invisible="status != 'submitted'" groups="request.request_approver"/>
+                        <button name="button_reject" string="Reject" type="object" invisible="status !='submitted'"
+                                groups="request.request_approver"/>
+                        <field name="status" widget="statusbar" statusbar_visible="draft,submitted,approved,rejected"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="employee_id"/>
+                                <field name="request_type_id" options="{'no_create': True}"/>
+                                <field name="req_reason"/>
+                            </group>
+                            <group>
+                                <field name="login_date_time" options="{'minuteStep': 1}"/>
+                                <field name="approver_id"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Request History">
+                                <field name="previous_request_ids" readonly="1">
+                                    <tree default_order="id desc" limit="5">
+                                        <field name="login_date_time"/>
+                                        <field name="request_type_id"/>
+                                        <field name="req_reason"/>
+                                        <field name="status"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record id="employee_request_search" model="ir.ui.view">
+            <field name="name">employee.request.search</field>
+            <field name="model">employee.request</field>
+            <field name="arch" type="xml">
+                <search>
+                    <filter name="to_approve"
+                            string="To Approve"
+                            domain="[('status','=','submitted')]"/>
+                    <separator/>
+                    <group>
+                        <filter name="group_employee"
+                                string="Employee"
+                                context="{'group_by':'employee_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        <record id="employee_request_action" model="ir.actions.act_window">
+            <field name="name">Employee Request</field>
+            <field name="res_model">employee.request</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="employee_request_search"/>
+            <field name="context">{'search_default_to_approve':1}</field>
+        </record>
+    </data>
+</odoo>

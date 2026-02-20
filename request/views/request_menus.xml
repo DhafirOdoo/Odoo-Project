@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <menuitem id="request_menu_root"
+                  name="Employee Requests"
+                  sequence="10"
+                  groups="request.request_user"/>
+
+        <menuitem id="employee_request_menu"
+                  name="Employee Requests"
+                  parent="request_menu_root"
+                  action="employee_request_action"/>
+
+        <menuitem id="request_configuration_menu"
+                  name="Configuration"
+                  parent="request_menu_root"/>
+        <menuitem id="request_type_menu"
+                  name="Request Type"
+                  parent="request_configuration_menu"
+                  action="request_type_action"
+                  groups="request.request_admin"/>
+
+    </data>
+</odoo>
