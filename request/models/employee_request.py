@@ -15,11 +15,11 @@ class EmployeeRequest(models.Model):
         string='Employee',
         default=lambda self: self.env.user.employee_id,
         required=True, readonly=True)
-    req_reason = fields.Text(string='Description', required=True)
-    login_date_time = fields.Datetime(
-        string='Date & Time',
+    req_reason = fields.Text(string='Description')
+    login_date_time = fields.Date(
+        string='Date',
         required=True,
-        default=fields.Datetime.now
+        default=fields.Date.today()
     )
     status = fields.Selection([
         ('draft', 'Draft'),
@@ -39,6 +39,29 @@ class EmployeeRequest(models.Model):
         compute='_compute_previous_requests',
         store=False
     )
+    late_time = fields.Float(string='Late Login Time')
+    early_time = fields.Float(string='Early Exit Time')
+    is_late = fields.Boolean(
+        related='request_type_id.is_late',
+        store=False
+    )
+    is_early = fields.Boolean(
+        related='request_type_id.is_early',
+        store=False
+    )
+    login_reason = fields.Text(string='Reason')
+    display_note = fields.Text(
+        string="Reason/Description",
+        compute="_compute_display_note"
+    )
+
+    @api.depends('req_reason', 'login_reason')
+    def _compute_display_note(self):
+        for rec in self:
+            if rec.req_reason:
+                rec.display_note = rec.req_reason
+            else:
+                rec.display_note = rec.login_reason
 
     @api.depends('employee_id')
     def _compute_previous_requests(self):
@@ -72,17 +95,17 @@ class EmployeeRequest(models.Model):
                 body=f"{rec.request_type_id.request_name} has been submitted by {rec.employee_id.name}.",
                 partner_ids=[rec.approver_id.user_partner_id.id],
                 message_type='notification',
-                subtype_xmlid='mail.mt_note',
             )
             rec.activity_schedule(
                 'mail.mail_activity_data_todo',
                 user_id=rec.approver_id.user_id.id,
-                note=f"{rec.request_type_id.request_name} requires your approval."
             )
 
     def button_approve(self):
         for rec in self:
             rec.status = 'approved'
+
+            rec.activity_feedback(['mail.mail_activity_data_todo'])
 
             requester_user = rec.employee_id.user_id
             if not requester_user:
@@ -99,6 +122,8 @@ class EmployeeRequest(models.Model):
     def button_reject(self):
         for rec in self:
             rec.status = 'rejected'
+
+            rec.activity_feedback(['mail.mail_activity_data_todo'])
 
             requester_user = rec.employee_id.user_id
             if not requester_user:

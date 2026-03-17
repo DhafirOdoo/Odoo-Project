@@ -9,11 +9,24 @@
 
         <menuitem id="employee_request_menu"
                   name="Employee Requests"
-                  parent="request_menu_root"
-                  action="employee_request_action"/>
+                  sequence="1"
+                  parent="request_menu_root"/>
+        <menuitem id="my_request_menu"
+                  name="My Requests"
+                  sequence="2"
+                  parent="employee_request_menu"
+                  action="my_request_action"
+                  groups="request.request_user"/>
+        <menuitem id="manage_request_menu"
+                  name="Manage Requests"
+                  sequence="1"
+                  parent="employee_request_menu"
+                  action="manage_request_action"
+                  groups="request.request_approver"/>
 
         <menuitem id="request_configuration_menu"
                   name="Configuration"
+                  sequence="2"
                   parent="request_menu_root"/>
         <menuitem id="request_type_menu"
                   name="Request Type"

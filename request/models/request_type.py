@@ -12,3 +12,5 @@ class RequestType(models.Model):
         string='Approver',
         required=True
     )
+    is_late = fields.Boolean(string='Is Late Login')
+    is_early = fields.Boolean(string='Is Early Exit')

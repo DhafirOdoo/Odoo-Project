@@ -8,7 +8,6 @@
                 <tree default_order="login_date_time desc">
                     <field name="employee_id"/>
                     <field name="request_type_id"/>
-                    <field name="req_reason"/>
                     <field name="login_date_time"/>
                     <field name="status" widget="badge"
                            decoration-success="status == 'approved'"
@@ -36,11 +35,30 @@
                         <group>
                             <group>
                                 <field name="employee_id"/>
-                                <field name="request_type_id" options="{'no_create': True}"/>
-                                <field name="req_reason"/>
+                                <field name="request_type_id" options="{'no_create': True}"
+                                       readonly="status != 'draft'"/>
+                                <field name="req_reason"
+                                       invisible="is_late or is_early"
+                                       readonly="status != 'draft'"
+                                       required="1"/>
+                                <field name="login_reason"
+                                       invisible="not (is_late or is_early)"
+                                       readonly="status != 'draft'"
+                                       required="1"/>
                             </group>
                             <group>
-                                <field name="login_date_time" options="{'minuteStep': 1}"/>
+                                <field name="login_date_time" options="{'minuteStep': 1}"
+                                       readonly="status != 'draft'"/>
+                                <field name="is_late" invisible="1"/>
+                                <field name="late_time"
+                                       invisible="not is_late"
+                                       widget="float_time"
+                                       readonly="status != 'draft'"/>
+                                <field name="is_early" invisible="1"/>
+                                <field name="early_time"
+                                       invisible="not is_early"
+                                       widget="float_time"
+                                       readonly="status != 'draft'"/>
                                 <field name="approver_id"/>
                             </group>
                         </group>
@@ -50,7 +68,7 @@
                                     <tree default_order="id desc" limit="5">
                                         <field name="login_date_time"/>
                                         <field name="request_type_id"/>
-                                        <field name="req_reason"/>
+                                        <field name="display_note"/>
                                         <field name="status"/>
                                     </tree>
                                 </field>
@@ -81,7 +99,15 @@
                 </search>
             </field>
         </record>
-        <record id="employee_request_action" model="ir.actions.act_window">
+        <record id="my_request_action" model="ir.actions.act_window">
+            <field name="name">Employee Request</field>
+            <field name="res_model">employee.request</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="employee_request_search"/>
+            <field name="context">{'search_default_to_approve':1}</field>
+            <field name="domain">[('create_uid', '=', uid)]</field>
+        </record>
+        <record id="manage_request_action" model="ir.actions.act_window">
             <field name="name">Employee Request</field>
             <field name="res_model">employee.request</field>
             <field name="view_mode">tree,form</field>
