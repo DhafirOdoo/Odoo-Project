@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="daily_activity_view_tree" model="ir.ui.view">
+            <field name="name">daily.activity.view.tree</field>
+            <field name="model">daily.activity</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="activity_name"/>
+                </tree>
+            </field>
+        </record>
+        <record id="daily_activity_view_form" model="ir.ui.view">
+            <field name="name">daily.activity.view.form</field>
+            <field name="model">daily.activity</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="activity_name"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="daily_activity_action" model="ir.actions.act_window">
+            <field name="name">Daily Activity</field>
+            <field name="res_model">daily.activity</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    </data>
+</odoo>
