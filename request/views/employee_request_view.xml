@@ -89,7 +89,7 @@
                 <search>
                     <filter name="to_approve"
                             string="To Approve"
-                            domain="[('status','=','submitted')]"/>
+                            domain="['|',('status','=','submitted'),('status','=','draft')]"/>
                     <separator/>
                     <group>
                         <filter name="group_employee"
