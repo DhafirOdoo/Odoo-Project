@@ -113,6 +113,7 @@
             <field name="view_mode">tree,form</field>
             <field name="search_view_id" ref="employee_request_search"/>
             <field name="context">{'search_default_to_approve':1}</field>
+            <field name="domain">[('status', '=', 'submitted')]</field>
         </record>
     </data>
 </odoo>
