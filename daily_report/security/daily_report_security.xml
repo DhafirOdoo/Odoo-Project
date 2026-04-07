@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        #Daily Report Rule
+        <record id="daily_report_user_rule" model="ir.rule">
+            <field name="name">Employee sees own report</field>
+            <field name="model_id" ref="model_daily_report"/>
+            <field name="groups" eval="[(4, ref('daily_report.daily_report_user'))]"/>
+            <field name="domain_force">
+                [('employee_id.user_id', '=', user.id)]
+            </field>
+        </record>
+        <record id="daily_report_manager_rule" model="ir.rule">
+            <field name="name">Manager sees all report</field>
+            <field name="model_id" ref="model_daily_report"/>
+            <field name="groups" eval="[(4, ref('daily_report.daily_report_manager'))]"/>
+            <field name="domain_force">
+                [(1,'=',1)]
+            </field>
+        </record>
+
+        #Daily Activity Rule
+        <record id="daily_activity_user_rule" model="ir.rule">
+            <field name="name">Employee sees own created activities</field>
+            <field name="model_id" ref="model_daily_activity"/>
+            <field name="groups" eval="[(4, ref('daily_report.daily_report_user'))]"/>
+            <field name="domain_force">
+                [('create_uid', '=', user.id)]
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_daily_report_manager,access_daily_report_manager,model_daily_report,daily_report_manager,1,1,1,1
+access_daily_activity_manager,access_daily_activity_manager,model_daily_activity,daily_report_manager,1,1,1,1
+access_daily_report_line_manager,access_daily_report_line_manager,model_daily_report_line,daily_report_manager,1,1,1,1
+
+
+access_daily_report_user,access_daily_report_user,model_daily_report,daily_report_user,1,1,1,1
+access_daily_activity_user,access_daily_activity_user,model_daily_activity,daily_report_user,1,1,1,1
+access_daily_report_line_user,access_daily_report_line_user,model_daily_report_line,daily_report_user,1,1,1,1

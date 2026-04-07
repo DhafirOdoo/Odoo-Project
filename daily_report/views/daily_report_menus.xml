@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <menuitem id="daily_report_menu_root"
+                  name="Daily Report"
+                  sequence="10"/>
+
+        #manager menu
+        <menuitem id="daily_report_menu"
+                  name="Daily Report"
+                  sequence="1"
+                  parent="daily_report_menu_root"/>
+        <menuitem id="my_report_menu"
+                  name="My Report"
+                  sequence="2"
+                  parent="daily_report_menu"
+                  action="my_report_action"
+                  groups="daily_report_user"/>
+        <menuitem id="manage_report_menu"
+                  name="Manage Report"
+                  sequence="1"
+                  parent="daily_report_menu"
+                  action="manage_report_action"
+                  groups="daily_report_manager"/>
+
+
+        <menuitem id="daily_report_config_menu"
+                  name="Configuration"
+                  sequence="2"
+                  parent="daily_report_menu_root"
+                  />
+        <menuitem id="daily_activity_menu"
+                  name="Daily Activity"
+                  parent="daily_report_config_menu"
+                  action="daily_activity_action"/>
+    </data>
+</odoo>
