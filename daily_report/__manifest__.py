@@ -1,9 +1,10 @@
 {
     'name': 'Daily Report',
+    'version': '17.0.1.0.0',
     'depends': ['base','hr','mail'],
     'installable': True,
     'application': True,
-    'summary': 'Daily Report',
+    'summary': 'Employee Daily Work Report Submission',
     'author':'Dhafir Technologies',
     'data': [
         'security/daily_report_groups.xml',

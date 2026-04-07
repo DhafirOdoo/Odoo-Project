@@ -87,6 +87,9 @@
             <field name="model">employee.request</field>
             <field name="arch" type="xml">
                 <search>
+                    <field name="employee_id"/>
+                    <field name="request_type_id"/>
+                    <field name="login_date_time"/>
                     <filter name="to_approve"
                             string="To Approve"
                             domain="['|',('status','=','submitted'),('status','=','draft')]"/>
@@ -113,7 +116,7 @@
             <field name="view_mode">tree,form</field>
             <field name="search_view_id" ref="employee_request_search"/>
             <field name="context">{'search_default_to_approve':1}</field>
-            <field name="domain">[('status', '=', 'submitted')]</field>
+            <field name="domain">[('status', 'in', ['submitted', 'approved', 'rejected'])]</field>
         </record>
     </data>
 </odoo>

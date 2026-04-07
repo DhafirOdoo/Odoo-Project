@@ -59,6 +59,8 @@
             <field name="model">daily.report</field>
             <field name="arch" type="xml">
                 <search>
+                    <field name="employee_id"/>
+                    <field name="report_date"/>
                     <filter name="today"
                             string="Today"
                             domain="[('report_date','=',context_today())]"/>

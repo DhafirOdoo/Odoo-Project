@@ -1,7 +1,8 @@
 {
     'name': 'Employee Request',
+    'version': '17.0.1.0.0',
     'depends': ['base', 'mail', 'hr'],
-    'summary':'Employee can submit requests',
+    'summary':'Employee Can Submit Various Requests',
     'author':'Dhafir Technologies',
     'installable': True,
     'application': True,
