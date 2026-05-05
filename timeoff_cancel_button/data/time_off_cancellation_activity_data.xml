@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="mail_activity_type_cancellation" model="mail.activity.type">
+            <field name="name">Cancellation Request</field>
+            <field name="icon">fa-times-circle</field>
+            <field name="res_model">hr.leave</field>
+            <field name="delay_count">0</field>
+        </record>
+    </data>
+</odoo>

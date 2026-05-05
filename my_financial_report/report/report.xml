@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="balance_sheet_report_action" model="ir.actions.report">
+            <field name="name">Balance Sheet Report</field>
+            <field name="model">balance.sheet.report</field>
+            <field name="report_type">qweb-html</field>
+            <field name="report_name">my_financial_report.balance_sheet_template</field>
+            <field name="report_file">my_financial_report.balance_sheet_template</field>
+        </record>
+        <record id="balance_sheet_pdf_report_action" model="ir.actions.report">
+            <field name="name">Balance Sheet Report</field>
+            <field name="model">balance.sheet.report</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">my_financial_report.balance_sheet_template</field>
+            <field name="report_file">my_financial_report.balance_sheet_template</field>
+        </record>
+        <record id="balance_sheet_xlsx_report_action" model="ir.actions.report">
+            <field name="name">Balance Sheet XLSX</field>
+            <field name="model">balance.sheet.report</field>
+            <field name="report_type">xlsx</field>
+            <field name="report_name">my_financial_report.balance_sheet_xlsx</field>
+            <field name="report_file">balance_sheet</field>
+            <field name="binding_model_id" ref="model_balance_sheet_report"/>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Optional view extension:
+        Adds a "Send Custom Mail" button in the Time Off form so you can
+        manually re-send / test the custom notification without having to
+        reset the record state.
+
+        Remove this file (and the entry in __manifest__.py) if you don't
+        need the manual button.
+    -->
+    <record id="hr_leave_form_view_custom_mail_btn" model="ir.ui.view">
+        <field name="name">hr.leave.form.custom.mail.button</field>
+        <field name="model">hr.leave</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_view_form"/>
+        <field name="arch" type="xml">
+            <!-- Append our button after the existing action buttons -->
+            <xpath expr="//header/button[last()]" position="after">
+                <button
+                    name="action_send_custom_mail_manual"
+                    string="Resend Custom Mail"
+                    type="object"
+                    class="btn-secondary"
+                    groups="hr_holidays.group_hr_holidays_manager"
+                    help="Manually re-send the custom time-off notification email."
+                />
+            </xpath>
+        </field>
+    </record>
+</odoo>

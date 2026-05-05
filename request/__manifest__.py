@@ -10,6 +10,7 @@
         'security/request_groups.xml',
         'security/request_security.xml',
         'security/ir.model.access.csv',
+        'data/mail_template_data.xml',
         'views/employee_request_view.xml',
         'views/request_type_view.xml',
         'views/request_menus.xml'

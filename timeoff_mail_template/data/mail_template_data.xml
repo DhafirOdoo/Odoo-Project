@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <!--        First Approval Mail Template-->
+        <record id="time_off_request_mail" model="mail.template">
+            <field name="name">Time Off Request Mail</field>
+            <field name="model_id" ref="hr_holidays.model_hr_leave"/>
+            <field name="subject">{{ object.holiday_status_id.name }} request from {{ object.employee_id.name }}</field>
+            <field name="email_from">{{ object.employee_id.work_email }}</field>
+            <field name="email_to">{{ object.employee_id.leave_manager_id.work_email }}</field>
+            <field name="body_html" type="html">
+                <div>
+                    <p>
+                       <b>Dear</b>
+                       <b><t t-out="object.employee_id.leave_manager_id.name"/>,</b>
+                    </p>
+                    <br/>
+                    <p>
+                        <b><t t-out="object.employee_id.name"/></b>
+                        has submitted a
+                       <b> <t t-out="object.holiday_status_id.name"/> </b>
+                        Request.
+                    </p>
+                    <p>
+                        <b>Leave Details:</b>
+                    </p>
+                    <ul>
+                      <li> <b>From: </b> <t t-out="object.request_date_from.strftime('%d/%m/%y')"/><b> To: </b> <t t-out="object.request_date_to.strftime('%d/%m/%y')"/></li>
+                      <li> <b>Duration: </b>  <t t-out="object.number_of_days_display"/> days
+                          <t t-if="object.request_unit_half">
+                            (<t t-out="dict(object.fields_get(['request_date_from_period'])['request_date_from_period']['selection']).get(object.request_date_from_period)"/>)
+                          </t>
+                      </li>
+                      <li> <b>Reason : </b>  <t t-out="object.name"/></li>
+                    </ul>
+                    <br/>
+                    <p>
+                        Kindly review the request.
+
+                    </p>
+                    <br>
+
+                    </br>
+                    <p>
+                        <b>
+                            Thanks &amp; Regards,<br/>
+                            <t t-out="user.signature"/>
+                        </b>
+                    </p>
+                    <p>
+                        <b>
+
+                        </b>
+                    </p>
+                </div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+        <!--        second Approval Mail Template-->
+        <record id="time_off_second_approve" model="mail.template">
+            <field name="name">Time Off Request Second Approval</field>
+            <field name="model_id" ref="hr_holidays.model_hr_leave"/>
+            <field name="subject">{{ object.holiday_status_id.name }} request from {{ object.employee_id.name }} for final approval</field>
+            <field name="email_from">{{ object.employee_id.work_email }}</field>
+            <field name="body_html" type="html">
+                <div>
+                    <p>
+                       <b> Dear
+                        <t t-out="ctx.get('officer_name')"/>,
+                        </b>
+                    </p>
+                    <br/>
+                    <p>
+                        <b><t t-out="object.employee_id.name"/></b>
+                        has submitted a
+                       <b> <t t-out="object.holiday_status_id.name"/> </b>
+                        request approved by <t t-out="object.employee_id.leave_manager_id.name"/> requires final approval.
+                    </p>
+                    <p>
+                        <b>Leave Details:</b>
+                    </p>
+                    <ul>
+                      <li> <b>From: </b> <t t-out="object.request_date_from.strftime('%d/%m/%y')"/><b> To: </b> <t t-out="object.request_date_to.strftime('%d/%m/%y')"/></li>
+                      <li> <b>Duration: </b>  <t t-out="object.number_of_days_display"/> days
+                          <t t-if="object.request_unit_half">
+                            (<t t-out="dict(object.fields_get(['request_date_from_period'])['request_date_from_period']['selection']).get(object.request_date_from_period)"/>)
+                          </t>
+                      </li>
+                      <li> <b>Reason : </b>  <t t-out="object.name"/></li>
+                    </ul>
+                    <br/>
+                    <p>
+                        Kindly review the request.
+
+                    </p>
+                    <br>
+
+                    </br>
+                    <p>
+                        <b>
+                            Thanks &amp; Regards,<br/>
+                            <t t-out="user.signature"/>
+                        </b>
+                    </p>
+                    <p>
+                        <b>
+
+                        </b>
+                    </p>
+                </div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+    </data>
+</odoo>
