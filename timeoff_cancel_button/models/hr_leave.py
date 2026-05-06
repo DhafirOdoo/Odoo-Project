@@ -7,6 +7,12 @@ class HrLeave(models.Model):
 
     cancel_requested = fields.Boolean(default=False)
     cancel_reason = fields.Text('Cancellation Reason')
+    is_current_user = fields.Boolean(compute='_compute_is_current_user')
+
+
+    def _compute_is_current_user(self):
+        for rec in self:
+            rec.is_current_user = rec.user_id == self.env.user
 
     @api.depends_context('uid')
     @api.depends('state', 'employee_id', 'date_from')

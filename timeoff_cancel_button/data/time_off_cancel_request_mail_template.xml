@@ -15,7 +15,7 @@
                     </p>
                     <p>
                         <t t-out="object.employee_id.name"/>
-                        is requested for the cancellation
+                        is requested for the cancellation of
                         <t t-out="object.holiday_status_id.name"/>
                         applied on <t t-out="object.create_date.strftime('%d/%m/%y')"/>
                     </p>

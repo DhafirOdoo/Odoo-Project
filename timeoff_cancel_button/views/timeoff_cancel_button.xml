@@ -11,16 +11,23 @@
                     <div class="o_hr_leave_column col_right col-md-6 col-12" invisible="cancel_requested == False">
                         <group string="Cancel Info">
                             <field name="cancel_requested" invisible="1"/>
+                            <field name="is_current_user" invisible="1"/>
                             <field name="cancel_reason" invisible="cancel_requested == False"
                                    readonly="cancel_requested"/>
                         </group>
                     </div>
                 </xpath>
                 <xpath expr="//button[@name='action_cancel']" position="attributes">
-                    <attribute name="invisible">not active or not can_cancel or cancel_requested</attribute>
+                    <attribute name="invisible">not active or not can_cancel or cancel_requested or not is_current_user</attribute>
                 </xpath>
                 <xpath expr="//field[@name='name']" position="attributes">
                     <attribute name="required">1</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_validate']" position="attributes">
+                    <attribute name="invisible">state != 'validate1' or cancel_requested or not active</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_refuse']" position="attributes">
+                     <attribute name="invisible">not active or not can_approve or state not in ('confirm', 'validate1', 'validate') or cancel_requested</attribute>
                 </xpath>
             </field>
         </record>

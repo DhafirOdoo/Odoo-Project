@@ -22,12 +22,6 @@ class TimeoffCancelRequest(models.TransientModel):
                 'cancel_reason': rec.reason,
             })
 
-
-
-        # group = self.env.ref('timeoff_cancel_button.group_timeoff_cancel_user', raise_if_not_found=False)
-        # partners = group.users.mapped('partner_id') if group else self.env['res.partner']
-        #
-        # if partners:
             manager_user = leave.employee_id.leave_manager_id
             if manager_user:
                 self.env['mail.activity'].sudo().create({
@@ -44,9 +38,6 @@ class TimeoffCancelRequest(models.TransientModel):
 
             template.sudo().send_mail(
                 leave.id,
-                # email_values={
-                #     'recipient_ids': [(6, 0, partners.ids)],
-                # },
                 force_send=True
             )
 
