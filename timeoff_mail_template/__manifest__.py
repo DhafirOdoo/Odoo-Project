@@ -7,6 +7,7 @@
     'summary': 'Custom Mail Template For Leave Request E-mail',
     'data': [
         'data/mail_template_data.xml',
+        'views/timeoff_form_view_inherit.xml',
     ],
 
 }

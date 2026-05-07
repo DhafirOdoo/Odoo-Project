@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="hr_leave_form_inherit_readonly" model="ir.ui.view">
+            <field name="name">hr.leave.form.inherit.cancel.button</field>
+            <field name="model">hr.leave</field>
+            <field name="inherit_id" ref="hr_holidays.hr_leave_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='col_left']" position="inside">
+                    <field name="is_request_submitted" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='holiday_status_id']" position="attributes">
+                    <attribute name="readonly">state in ['cancel', 'refuse', 'validate', 'validate1'] or is_request_submitted</attribute>
+                </xpath>
+                <xpath expr="//field[@name='request_date_from']" position="attributes">
+                    <attribute name="readonly">state not in ('draft', 'confirm') or is_request_submitted</attribute>
+                </xpath>
+                <xpath expr="//field[@name='request_date_from_period']" position="attributes">
+                    <attribute name="readonly">state not in ('draft', 'confirm') or is_request_submitted</attribute>
+                </xpath>
+                <xpath expr="//field[@name='request_unit_half']" position="attributes">
+                    <attribute name="readonly">state not in ('draft', 'confirm') or is_request_submitted</attribute>
+                </xpath>
+                <xpath expr="//field[@name='request_date_to']" position="attributes">
+                    <attribute name="readonly">state not in ('draft', 'confirm') or is_request_submitted</attribute>
+                </xpath>
+                <xpath expr="//field[@name='name']" position="attributes">
+                    <attribute name="readonly">state not in ('draft', 'confirm') or is_request_submitted</attribute>
+                </xpath>
+                <xpath expr="//div[@class='o_row' and @invisible='request_unit_half or request_unit_hours']//field[@name='request_date_from']"
+                       position="attributes">
+                    <attribute name="readonly">
+                        state not in ('draft', 'confirm') or is_request_submitted
+                    </attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_draft']" position="attributes">
+                    <attribute name="invisible">not can_reset or state not in ['confirm', 'refuse'] or is_request_submitted</attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

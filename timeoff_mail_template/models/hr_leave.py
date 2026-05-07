@@ -1,10 +1,11 @@
-from odoo import models, api
+from odoo import fields, models, api
 
 
 class HolidaysRequest(models.Model):
     _inherit = 'hr.leave'
 
 
+    is_request_submitted = fields.Boolean(default=False)
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -15,6 +16,7 @@ class HolidaysRequest(models.Model):
         for rec in records:
             if rec.state == 'confirm':
                 template.send_mail(rec.id, force_send=True)
+                rec.is_request_submitted = True
 
         return records
 
