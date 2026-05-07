@@ -88,6 +88,12 @@ class EmployeeRequest(models.Model):
     def button_submit(self):
         template = self.env.ref('request.employee_request_approver_mail')
         for rec in self:
+            if rec.is_late:
+                if rec.late_time <= 0:
+                    raise UserError("Please set late login time")
+            elif rec.is_early:
+                if rec.early_time <= 0:
+                    raise UserError("Please set early login time")
             rec.status = 'submitted'
 
             rec.message_post(

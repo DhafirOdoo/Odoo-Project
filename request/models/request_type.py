@@ -1,4 +1,5 @@
-from odoo import models, fields
+from odoo import api, models, fields
+from odoo.exceptions import ValidationError
 
 class RequestType(models.Model):
     _name = 'request.type'
@@ -14,3 +15,11 @@ class RequestType(models.Model):
     )
     is_late = fields.Boolean(string='Is Late Login')
     is_early = fields.Boolean(string='Is Early Exit')
+
+    @api.constrains('is_late','is_early')
+    def _check_request_type(self):
+        for rec in self:
+            if rec.is_late and rec.is_early:
+                raise ValidationError(
+                    "You cannot select both Late Login and Early Exit."
+                )

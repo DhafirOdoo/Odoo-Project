@@ -10,12 +10,17 @@
             <field name="body_html" type="html">
                     <div>
                     <p>
-                        Dear
+                        <b>
+                            Dear
                         <t t-out="object.request_type_id.approver_id.name"/>,
+                        </b>
                     </p>
 
+
+
                     <p>
-                        <t t-out="object.employee_id.name"/> has submitted a
+                        <b><t t-out="object.employee_id.name"/></b>
+                        has submitted a
                         <b>
                             <t t-out="object.request_type_id.request_name"/>
                         </b>
@@ -23,13 +28,18 @@
                         <t t-out="format_datetime(object.create_date, dt_format='dd-MM-yyyy')"/>.
                     </p>
 
-                    <p>Please review the request.</p>
+                    <p>Kindly review the request.</p>
 
                     <br/>
-
-                    <p>Thanks,</p>
                     <p>
-                        <t t-out="object.employee_id.name"/>
+                        <b>
+                            Thanks &amp; Regards,
+                        </b>
+                    </p>
+                    <p>
+                         <b>
+                            <t t-out="object.employee_id.name"/>
+                        </b>
                     </p>
                 </div>
             </field>
