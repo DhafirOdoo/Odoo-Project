@@ -7,6 +7,7 @@
     'installable': True,
     'application': True,
     'data': [
+        'data/mail_template_data.xml',
         'security/request_groups.xml',
         'security/request_security.xml',
         'security/ir.model.access.csv',

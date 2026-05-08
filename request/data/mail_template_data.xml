@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="employee_request_approver_mail" model="mail.template">
+            <field name="name">Employee Request Submit</field>
+            <field name="model_id" ref="request.model_employee_request"/>
+            <field name="subject">{{ object.request_type_id.request_name}} submitted by {{ object.employee_id.name}}</field>
+            <field name="email_from">{{ object.employee_id.work_email }}</field>
+            <field name="email_to">{{ object.request_type_id.approver_id.work_email }}</field>
+            <field name="body_html" type="html">
+                    <div>
+                    <p>
+                        <b>
+                            Dear
+                        <t t-out="object.request_type_id.approver_id.name"/>,
+                        </b>
+                    </p>
+
+
+
+                    <p>
+                        <b><t t-out="object.employee_id.name"/></b>
+                        has submitted a
+                        <b>
+                            <t t-out="object.request_type_id.request_name"/>
+                        </b>
+                        on
+                        <t t-out="format_datetime(object.create_date, dt_format='dd-MM-yyyy')"/>.
+                    </p>
+
+                    <p>Kindly review the request.</p>
+
+                    <br/>
+                    <p>
+                        <b>
+                            Thanks &amp; Regards,
+                        </b>
+                    </p>
+                    <p>
+                         <b>
+                            <t t-out="object.employee_id.name"/>
+                        </b>
+                    </p>
+                </div>
+            </field>
+
+            <field name="auto_delete" eval="True"/>
+
+        </record>
+    </data>
+</odoo>

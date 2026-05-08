@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="balance_sheet_report_wizard_view" model="ir.ui.view">
+            <field name="name">balance.sheet.report</field>
+            <field name="model">balance.sheet.report</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <group>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                        </group>
+                        <group>
+                            <field name="only_with_balance"/>
+                            <field name="target_move"/>
+                            <field name="show_debit_credit"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button string="View" class="btn-primary" type="object" name="action_view_report"/>
+<!--                        <button string="Print-Pdf" class="btn-primary" type="object" name="action_print_report"/>-->
+                        <button string="Print-Xlsx" class="btn-primary" type="object" name="action_xlsx_report"/>
+                        <button string="Discard" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <record id="action_balance_sheet_report" model="ir.actions.act_window">
+            <field name="name">Balance Sheet</field>
+            <field name="res_model">balance.sheet.report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="balance_sheet_report_wizard_view"/>
+            <field name="target">new</field>
+        </record>
+        <menuitem id="balance_sheet_report_menu" sequence="1"
+                  name="Balance Sheet"
+                  parent="base_accounting_kit.account_reports_generic_statements"
+                  action="action_balance_sheet_report"/>
+    </data>
+</odoo>

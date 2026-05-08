@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="group_timeoff_cancel_user" model="res.groups">
+            <field name="name">Time off Cancel User</field>
+            <field name="category_id" ref="base.module_category_human_resources_time_off"/>
+            <field name="users" eval="[(4, ref('base.user_admin'))]"/>
+        </record>
+    </data>
+</odoo>

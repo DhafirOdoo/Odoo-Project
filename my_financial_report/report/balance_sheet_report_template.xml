@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="balance_sheet_template">
+        <t t-call="web.html_container">
+            <div class="page">
+                <h2 style="text-align:center;">Balance Sheet</h2>
+
+                <!-- Date -->
+                <p style="text-align:center;">
+                    <strong>
+                        From:
+                        <t t-esc="docs.date_from"/>
+                        <span style="margin-left: 30px;"></span>
+                        To:
+                        <t t-esc="docs.date_to"/>
+                    </strong>
+                </p>
+
+                <!-- T FORMAT TABLE -->
+                <table class="table table-bordered" style="width:100%; border:2px solid black; border-collapse:collapse;">
+                    <thead>
+                        <tr>
+                            <th style="width:50%;
+                            text-align:center;
+                            font-size:20px;
+                             background:#999999;">
+                                Liabilities
+                            </th>
+                            <th style="width:50%; text-align:center;
+                            font-size:20px;
+                            background:#999999;">
+                                Assets
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <!-- LIABILITIES COLUMN -->
+                            <td style="vertical-align:top;">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Account</th>
+                                            <t t-if="show_debit_credit">
+                                                <th style="text-align:right;">Debit</th>
+                                                <th style="text-align:right;">Credit</th>
+                                            </t>
+                                            <th style="text-align:right;">Balance</th>
+                                        </tr>
+                                    </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td colspan="4" style="text-align:center;
+                                                    padding-top:10px;
+                                                    font-size:17px;
+                                                    background:#999999;">
+                                                    <strong>Equity</strong>
+                                                </td>
+                                            </tr>
+                                            <t t-foreach="final_equity" t-as="group">
+                                                <tr style="background:#bcbcbc;">
+                                                    <td><strong><t t-esc="group['type']"/></strong></td>
+
+                                                    <t t-if="show_debit_credit">
+                                                        <td style="background:#bcbcbc;"></td>
+                                                        <td style="background:#bcbcbc;"></td>
+                                                    </t>
+
+                                                    <td style="text-align:right;">
+                                                        <strong><t t-esc="group['total']"/></strong>
+                                                    </td>
+                                                </tr>
+
+                                                <t t-foreach="group['accounts']" t-as="line">
+                                                    <tr>
+                                                        <td style="padding-left:20px;
+                                                            background-color: #f2f2f2;">
+                                                            <t t-esc="line['name']"/>
+                                                        </td>
+
+                                                        <t t-if="show_debit_credit">
+                                                            <td style="text-align:right;
+                                                                background-color: #f2f2f2;">
+                                                                <t t-esc="line['debit']"/>
+                                                            </td>
+                                                            <td style="text-align:right;
+                                                                background-color: #f2f2f2;">
+                                                                <t t-esc="line['credit']"/>
+                                                            </td>
+                                                        </t>
+
+                                                        <td style="text-align:right;
+                                                            background-color: #f2f2f2;">
+                                                            <t t-esc="line['balance']"/>
+                                                        </td>
+                                                    </tr>
+
+                                                </t>
+                                            </t>
+                                            <tr style="border-top:1px solid black;
+                                                background:#bcbcbc;">
+                                                <td><strong>Total Equity</strong></td>
+
+                                                <t t-if="show_debit_credit">
+                                                    <td></td>
+                                                    <td></td>
+                                                </t>
+
+                                                <td style="text-align:right;
+                                                    background:#bcbcbc;">
+                                                    <strong><t t-esc="total_equity"/></strong>
+                                                </td>
+                                            </tr>
+
+                                            <!-- Profit & Loss -->
+                                            <tr>
+                                                <td style="padding-top:10px;
+                                                    font-size:17px;
+                                                    background:#999999;">
+                                                    <strong>Profit And Loss Account</strong>
+                                                </td>
+
+                                                <t t-if="show_debit_credit">
+                                                    <td style="background:#999999;"></td>
+                                                    <td style="background:#999999;"></td>
+                                                </t>
+
+                                                <td style="text-align:right;
+                                                    background:#999999;">
+                                                    <strong><t t-esc="profit_loss"/></strong>
+                                                </td>
+                                            </tr>
+
+                                            <t t-foreach="final_liabilities" t-as="group">
+                                                <tr>
+                                                    <td style="
+                                                        font-weight:bold;
+                                                        background:#bcbcbc;
+                                                        padding-top:10px;">
+
+                                                        <t t-esc="group['type']"/>
+
+                                                    </td>
+                                                    <t t-if="show_debit_credit">
+                                                        <td style="background:#bcbcbc;"></td>
+                                                        <td style="background:#bcbcbc;"></td>
+                                                    </t>
+                                                    <td style="
+                                                        font-weight:bold;
+                                                        background:#bcbcbc;
+                                                        padding-top:10px;
+                                                        text-align:right;">
+
+                                                        <t t-esc="group['total']"/>
+
+                                                    </td>
+                                                </tr>
+                                                <t t-foreach="group['accounts']" t-as="line">
+                                                    <tr>
+                                                        <td style="padding-left:20px;
+                                                            background-color: #f2f2f2;">
+                                                            <t t-esc="line['name']"/>
+                                                        </td>
+                                                        <t t-if="show_debit_credit">
+                                                            <td style="text-align:right;
+                                                                background-color: #f2f2f2;">
+                                                                <t t-esc="line['debit']"/>
+                                                            </td>
+                                                            <td style="text-align:right;
+                                                                background-color: #f2f2f2;">
+                                                                <t t-esc="line['credit']"/>
+                                                            </td>
+                                                        </t>
+                                                        <td style="text-align:right;
+                                                            background-color: #f2f2f2;">
+                                                            <t t-esc="line['balance']"/>
+                                                        </td>
+                                                    </tr>
+                                                </t>
+                                            </t>
+                                            <!-- Total Liabilities -->
+                                            <tr style="border-top:2px solid black;
+                                                background:#bcbcbc;">
+                                                <td><strong>Total Liabilities</strong></td>
+
+                                                <t t-if="show_debit_credit">
+                                                    <td></td>
+                                                    <td ></td>
+                                                </t>
+
+                                                <td style="text-align:right;
+                                                    background:#bcbcbc;">
+                                                    <strong><t t-esc="total_liabilities"/></strong>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                </table>
+                            </td>
+                            <!-- < Assets >-->
+                            <td style="vertical-align:top;">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Account</th>
+                                            <t t-if="show_debit_credit">
+                                                <th style="text-align:right;">Debit</th>
+                                                <th style="text-align:right;">Credit</th>
+                                            </t>
+                                            <th style="text-align:right;">Balance</th>
+                                        </tr>
+                                    </thead>
+                                        <tbody>
+                                    <!-- Loop through grouped assets -->
+                                            <t t-foreach="final_assets" t-as="group">
+                                                <!-- 🔹 Group Header -->
+                                                <tr>
+                                                    <td style="
+                                                        font-weight:bold;
+                                                        background:#bcbcbc;
+                                                        padding-top:10px;">
+
+                                                        <t t-esc="group['type']"/>
+
+                                                    </td>
+                                                    <t t-if="show_debit_credit">
+                                                        <td style="background:#bcbcbc;"></td>
+                                                        <td style="background:#bcbcbc;"></td>
+                                                    </t>
+                                                    <td style="
+                                                        font-weight:bold;
+                                                        background:#bcbcbc;
+                                                        padding-top:10px;
+                                                        text-align:right;">
+
+                                                        <t t-esc="group['total']"/>
+
+                                                    </td>
+                                                </tr>
+
+                                                <!-- 🔹 Accounts -->
+                                                <t t-foreach="group['accounts']" t-as="line">
+                                                    <tr>
+                                                        <td style="padding-left:20px;
+                                                            background-color: #f2f2f2;">
+                                                            <t t-esc="line['name']"/>
+                                                        </td>
+                                                        <t t-if="show_debit_credit">
+                                                            <td style="text-align:right;
+                                                                background-color: #f2f2f2;">
+                                                                <t t-esc="line['debit']"/>
+                                                            </td>
+                                                            <td style="text-align:right;
+                                                                background-color: #f2f2f2;">
+                                                                <t t-esc="line['credit']"/>
+                                                            </td>
+                                                        </t>
+                                                        <td style="text-align:right;
+                                                            background-color: #f2f2f2;">
+                                                            <t t-esc="line['balance']"/>
+                                                        </td>
+                                                    </tr>
+                                                </t>
+                                            </t>
+                                        </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr style="border-top:2px solid black;">
+
+                            <!-- LEFT SIDE (LIABILITIES + EQUITY) -->
+                            <td style="background:#999999;
+                                padding:8px;">
+                                <div style="display:flex; justify-content:space-between;">
+                                    <strong>Total Liabilities + Equity</strong>
+                                    <strong><t t-esc="total_liabilities_final"/></strong>
+                                </div>
+                            </td>
+
+                            <!-- RIGHT SIDE (ASSETS) -->
+                            <td style="background:#999999;
+                                padding:8px;">
+                                <div style="display:flex; justify-content:space-between;">
+                                    <strong>Total Assets</strong>
+                                    <strong><t t-esc="total_assets"/></strong>
+                                </div>
+                            </td>
+
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </t>
+    </template>
+</odoo>

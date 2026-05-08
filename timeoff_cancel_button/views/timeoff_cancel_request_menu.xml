@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <menuitem
+        id="time_off_cancel_menu"
+        sequence="3"
+        name="Time off cancel request"
+        parent="hr_holidays.menu_hr_holidays_root"
+        groups="timeoff_cancel_button.group_timeoff_cancel_user"
+        action="action_timeoff_cancel_request"/>
+
+</odoo>

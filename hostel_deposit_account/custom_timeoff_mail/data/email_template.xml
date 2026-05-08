@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!--
+            Custom Time Off Email Template
+            ================================
+            Sent automatically when an employee submits a time off request.
+            Customize the subject, body_html, and recipient fields below.
+
+            Available variables inside the template (Jinja / QWeb):
+                object      → the hr.leave record
+                object.employee_id          → employee
+                object.holiday_status_id    → leave type
+                object.date_from            → start date
+                object.date_to              → end date
+                object.number_of_days       → duration in days
+                object.name                 → description / reason
+                object.state                → current state
+                user                        → current user
+                ctx                         → context dict
+        -->
+
+        <record id="email_template_custom_timeoff" model="mail.template">
+            <field name="name">Custom Time Off Request Notification</field>
+            <field name="model_id" ref="hr_holidays.model_hr_leave"/>
+            <field name="subject">
+                Time Off Request: {{ object.employee_id.name }} –
+                {{ object.holiday_status_id.name }}
+            </field>
+
+            <!--
+                Email recipient:
+                  - object.employee_id.parent_id.work_email  → direct manager
+                  - object.employee_id.work_email            → the employee themselves
+                  - a fixed address like 'hr@yourcompany.com'
+                Use a comma-separated list for multiple recipients.
+            -->
+            <field name="email_to">{{ object.employee_id.parent_id.work_email or '' }}</field>
+            <field name="email_cc">{{ object.employee_id.work_email or '' }}</field>
+
+            <!-- Optional: set a Reply-To address -->
+            <!-- <field name="reply_to">hr@yourcompany.com</field> -->
+
+            <field name="body_html" type="html">
+                <![CDATA[
+<div style="font-family: Arial, sans-serif; font-size: 14px; color: #333;">
+
+    <h2 style="color: #875A7B;">
+        &#128336; New Time Off Request
+    </h2>
+
+    <p>Dear
+        <strong>{{ object.employee_id.parent_id.name or 'Manager' }}</strong>,
+    </p>
+
+    <p>
+        <strong>{{ object.employee_id.name }}</strong> has submitted a time off
+        request. Please review the details below.
+    </p>
+
+    <table style="border-collapse: collapse; width: 100%; max-width: 600px;">
+        <tr style="background-color: #f5f0ff;">
+            <td style="padding: 8px 12px; font-weight: bold; width: 40%;">Employee</td>
+            <td style="padding: 8px 12px;">{{ object.employee_id.name }}</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px 12px; font-weight: bold;">Leave Type</td>
+            <td style="padding: 8px 12px;">{{ object.holiday_status_id.name }}</td>
+        </tr>
+        <tr style="background-color: #f5f0ff;">
+            <td style="padding: 8px 12px; font-weight: bold;">From</td>
+            <td style="padding: 8px 12px;">
+                {{ object.date_from | date('dd MMM yyyy') if object.date_from else 'N/A' }}
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 8px 12px; font-weight: bold;">To</td>
+            <td style="padding: 8px 12px;">
+                {{ object.date_to | date('dd MMM yyyy') if object.date_to else 'N/A' }}
+            </td>
+        </tr>
+        <tr style="background-color: #f5f0ff;">
+            <td style="padding: 8px 12px; font-weight: bold;">Duration</td>
+            <td style="padding: 8px 12px;">
+                {{ object.number_of_days }} day(s)
+            </td>
+        </tr>
+        % if object.name:
+        <tr>
+            <td style="padding: 8px 12px; font-weight: bold;">Reason</td>
+            <td style="padding: 8px 12px;">{{ object.name }}</td>
+        </tr>
+        % endif
+    </table>
+
+    <br/>
+    <p>
+        Please log in to Odoo to
+        <strong>approve or refuse</strong> this request.
+    </p>
+
+    <p style="margin-top: 24px; color: #888; font-size: 12px;">
+        This is an automated message from your HR system.
+        Please do not reply directly to this email.
+    </p>
+
+</div>
+]]>
+            </field>
+
+            <field name="auto_delete" eval="True"/>
+            <field name="lang">{{ object.employee_id.sudo().work_email }}</field>
+        </record>
+
+    </data>
+</odoo>

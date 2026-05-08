@@ -86,20 +86,26 @@ class EmployeeRequest(models.Model):
 
 
     def button_submit(self):
+        template = self.env.ref('request.employee_request_approver_mail')
         for rec in self:
+            if rec.is_late:
+                if rec.late_time <= 0:
+                    raise UserError("Please set late login time")
+            elif rec.is_early:
+                if rec.early_time <= 0:
+                    raise UserError("Please set early login time")
             rec.status = 'submitted'
 
-            rec.message_subscribe(partner_ids=[rec.approver_id.user_partner_id.id])
-
             rec.message_post(
-                body=f"{rec.request_type_id.request_name} has been submitted by {rec.employee_id.name}.",
-                partner_ids=[rec.approver_id.user_partner_id.id],
-                message_type='notification',
+                body=f"{rec.request_type_id.request_name} has been submitted by {rec.employee_id.name}."
             )
+            template.send_mail(rec.id, force_send=True)
+
             rec.activity_schedule(
                 'mail.mail_activity_data_todo',
                 user_id=rec.approver_id.user_id.id,
             )
+
 
     def button_approve(self):
         for rec in self:
