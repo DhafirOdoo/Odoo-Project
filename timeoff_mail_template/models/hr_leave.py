@@ -16,7 +16,13 @@ class HolidaysRequest(models.Model):
         for rec in records:
             if rec.state == 'confirm':
                 template.send_mail(rec.id, force_send=True)
-                rec.is_request_submitted = True
+                # rec.is_request_submitted = True
+
+                rec.with_context(
+                    skip_leave_security=True
+                ).write({
+                    'is_request_submitted': True
+                })
 
         return records
 
