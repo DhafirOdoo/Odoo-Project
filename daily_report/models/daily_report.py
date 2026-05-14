@@ -17,7 +17,7 @@ class DailyReport(models.Model):
     )
     report_date = fields.Date(
         string='Date',
-        default=fields.Date.today(),
+        default=lambda self: fields.Date.today(),
         required=True,
         tracking=True
     )
