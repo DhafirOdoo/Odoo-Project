@@ -19,7 +19,7 @@ class EmployeeRequest(models.Model):
     login_date_time = fields.Date(
         string='Date',
         required=True,
-        default=fields.Date.today()
+        default=lambda self: fields.Date.today()
     )
     status = fields.Selection([
         ('draft', 'Draft'),
