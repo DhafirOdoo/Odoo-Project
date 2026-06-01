@@ -12,9 +12,9 @@ class LeaveActionController(http.Controller):
             leave.action_approve()
 
 
-        return request.redirect(
-            f'/web#id={leave.id}&model=hr.leave&view_type=form'
-        )
+        # return request.redirect(
+        #     f'/web#id={leave.id}&model=hr.leave&view_type=form'
+        # )
 
     @http.route('/leave/refuse/<int:leave_id>', type='http', auth='user')
     def refuse_leave(self, leave_id, **kwargs):
@@ -23,6 +23,6 @@ class LeaveActionController(http.Controller):
         if leave.exists():
             leave.action_refuse()
 
-        return request.redirect(
-            f'/web#id={leave.id}&model=hr.leave&view_type=form'
-        )
+        # return request.redirect(
+        #     f'/web#id={leave.id}&model=hr.leave&view_type=form'
+        # )
