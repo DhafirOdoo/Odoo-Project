@@ -9,7 +9,7 @@ class LeaveActionController(http.Controller):
         leave = request.env['hr.leave'].sudo().browse(leave_id)
 
         if leave.exists():
-            leave.aciton_approve()
+            leave.action_approve()
 
 
         return request.redirect(
