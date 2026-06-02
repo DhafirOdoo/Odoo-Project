@@ -1,6 +1,6 @@
 {
     'name': 'Custom Time Off Mail Template',
-    'version': '17.0.1.0.0',
+    'version': '17.0.1.0.1',
     'depends': ['mail', 'hr_holidays'],
     'installable': True,
     'author': 'Dhafir Technologies',

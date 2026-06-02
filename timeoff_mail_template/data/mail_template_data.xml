@@ -38,6 +38,41 @@
                         Kindly review the request.
 
                     </p>
+                    <div style="margin-top:20px; display:flex; justify-content:center; align-items:center;">
+                        <a t-attf-href="/web#id={{ object.id }}&amp;model=hr.leave&amp;view_type=form"
+                           style="background:#875A7B;
+                                  color:white;
+                                  padding:10px 18px;
+                                  text-decoration:none;
+                                  border-radius:5px;
+                                  margin-right:10px;
+                                  display:inline-block;">
+                            View Request
+                        </a>
+
+                        <!-- Approve Button -->
+                        <a t-attf-href="/leave/approve/{{ object.id }}"
+                           style="background:#28a745;
+                                  color:white;
+                                  padding:10px 18px;
+                                  text-decoration:none;
+                                  border-radius:5px;
+                                  margin-right:10px;
+                                  display:inline-block;">
+                            Approve
+                        </a>
+
+                        <!-- Refuse Button -->
+                        <a t-attf-href="/leave/refuse/{{ object.id }}"
+                           style="background:#dc3545;
+                                  color:white;
+                                  padding:10px 18px;
+                                  text-decoration:none;
+                                  border-radius:5px;
+                                  display:inline-block;">
+                            Refuse
+                        </a>
+                    </div>
                     <br>
 
                     </br>
@@ -94,7 +129,43 @@
                         Kindly review the request.
 
                     </p>
+                    <div style="margin-top:20px; display:flex; justify-content:center; align-items:center;">
+                        <a t-attf-href="/web#id={{ object.id }}&amp;model=hr.leave&amp;view_type=form"
+                           style="background:#875A7B;
+                                  color:white;
+                                  padding:10px 18px;
+                                  text-decoration:none;
+                                  border-radius:5px;
+                                  margin-right:10px;
+                                  display:inline-block;">
+                            View Request
+                        </a>
+
+                        <!-- Approve Button -->
+                        <a t-attf-href="/leave/validate/{{ object.id }}"
+                           style="background:#28a745;
+                                  color:white;
+                                  padding:10px 18px;
+                                  text-decoration:none;
+                                  border-radius:5px;
+                                  margin-right:10px;
+                                  display:inline-block;">
+                            Validate
+                        </a>
+
+                        <!-- Refuse Button -->
+                        <a t-attf-href="/leave/refuse/{{ object.id }}"
+                           style="background:#dc3545;
+                                  color:white;
+                                  padding:10px 18px;
+                                  text-decoration:none;
+                                  border-radius:5px;
+                                  display:inline-block;">
+                            Refuse
+                        </a>
+                    </div>
                     <br>
+
 
                     </br>
                     <p>
