@@ -5,7 +5,7 @@
         <record id="time_off_request_mail" model="mail.template">
             <field name="name">Time Off Request Mail</field>
             <field name="model_id" ref="hr_holidays.model_hr_leave"/>
-            <field name="subject">{{ object.holiday_status_id.name }} request from {{ object.employee_id.name }}</field>
+            <field name="subject">{{ object.holiday_status_id.name }} request from {{ object.employee_id.name }} [Dhafir INDIA]</field>
             <field name="email_from">{{ object.employee_id.work_email }}</field>
             <field name="email_to">{{ object.employee_id.leave_manager_id.work_email }}</field>
             <field name="body_html" type="html">
@@ -51,27 +51,27 @@
                         </a>
 
                         <!-- Approve Button -->
-                        <a t-attf-href="/leave/approve/{{ object.id }}"
-                           style="background:#28a745;
-                                  color:white;
-                                  padding:10px 18px;
-                                  text-decoration:none;
-                                  border-radius:5px;
-                                  margin-right:10px;
-                                  display:inline-block;">
-                            Approve
-                        </a>
+<!--                        <a t-attf-href="/leave/approve/{{ object.id }}"-->
+<!--                           style="background:#28a745;-->
+<!--                                  color:white;-->
+<!--                                  padding:10px 18px;-->
+<!--                                  text-decoration:none;-->
+<!--                                  border-radius:5px;-->
+<!--                                  margin-right:10px;-->
+<!--                                  display:inline-block;">-->
+<!--                            Approve-->
+<!--                        </a>-->
 
                         <!-- Refuse Button -->
-                        <a t-attf-href="/leave/refuse/{{ object.id }}"
-                           style="background:#dc3545;
-                                  color:white;
-                                  padding:10px 18px;
-                                  text-decoration:none;
-                                  border-radius:5px;
-                                  display:inline-block;">
-                            Refuse
-                        </a>
+<!--                        <a t-attf-href="/leave/refuse/{{ object.id }}"-->
+<!--                           style="background:#dc3545;-->
+<!--                                  color:white;-->
+<!--                                  padding:10px 18px;-->
+<!--                                  text-decoration:none;-->
+<!--                                  border-radius:5px;-->
+<!--                                  display:inline-block;">-->
+<!--                            Refuse-->
+<!--                        </a>-->
                     </div>
                     <br>
 
@@ -80,11 +80,6 @@
                         <b>
                             Thanks &amp; Regards,<br/>
                             <t t-out="user.signature"/>
-                        </b>
-                    </p>
-                    <p>
-                        <b>
-
                         </b>
                     </p>
                 </div>
@@ -96,7 +91,7 @@
         <record id="time_off_second_approve" model="mail.template">
             <field name="name">Time Off Request Second Approval</field>
             <field name="model_id" ref="hr_holidays.model_hr_leave"/>
-            <field name="subject">{{ object.holiday_status_id.name }} request from {{ object.employee_id.name }} for final approval</field>
+            <field name="subject">{{ object.holiday_status_id.name }} request from {{ object.employee_id.name }} for final approval [Dhafir INDIA]</field>
             <field name="email_from">{{ object.employee_id.work_email }}</field>
             <field name="body_html" type="html">
                 <div>
@@ -142,27 +137,27 @@
                         </a>
 
                         <!-- Approve Button -->
-                        <a t-attf-href="/leave/validate/{{ object.id }}"
-                           style="background:#28a745;
-                                  color:white;
-                                  padding:10px 18px;
-                                  text-decoration:none;
-                                  border-radius:5px;
-                                  margin-right:10px;
-                                  display:inline-block;">
-                            Validate
-                        </a>
+<!--                        <a t-attf-href="/leave/validate/{{ object.id }}"-->
+<!--                           style="background:#28a745;-->
+<!--                                  color:white;-->
+<!--                                  padding:10px 18px;-->
+<!--                                  text-decoration:none;-->
+<!--                                  border-radius:5px;-->
+<!--                                  margin-right:10px;-->
+<!--                                  display:inline-block;">-->
+<!--                            Validate-->
+<!--                        </a>-->
 
                         <!-- Refuse Button -->
-                        <a t-attf-href="/leave/refuse/{{ object.id }}"
-                           style="background:#dc3545;
-                                  color:white;
-                                  padding:10px 18px;
-                                  text-decoration:none;
-                                  border-radius:5px;
-                                  display:inline-block;">
-                            Refuse
-                        </a>
+<!--                        <a t-attf-href="/leave/refuse/{{ object.id }}"-->
+<!--                           style="background:#dc3545;-->
+<!--                                  color:white;-->
+<!--                                  padding:10px 18px;-->
+<!--                                  text-decoration:none;-->
+<!--                                  border-radius:5px;-->
+<!--                                  display:inline-block;">-->
+<!--                            Refuse-->
+<!--                        </a>-->
                     </div>
                     <br>
 
@@ -172,11 +167,6 @@
                         <b>
                             Thanks &amp; Regards,<br/>
                             <t t-out="user.signature"/>
-                        </b>
-                    </p>
-                    <p>
-                        <b>
-
                         </b>
                     </p>
                 </div>
