@@ -27,12 +27,12 @@
                         on
                         <t t-out="format_datetime(object.create_date, dt_format='dd-MM-yyyy')"/>.
                     </p>
-                    <p>
-                        <b>
-                            Request History :
-                        </b>
-                    </p>
-                    <p>
+                    <t t-if="object.is_early or object.is_late">
+                        <p>
+                            <b>
+                                Request History :
+                            </b>
+                        </p>
                         <table class="table table-bordered" style="border: 1px solid black;">
                             <thead>
                                 <tr>
@@ -85,7 +85,7 @@
                                 </tr>
                             </tbody>
                         </table>
-                    </p>
+                    </t>
 
                     <p>Kindly review the request.</p>
                     <br>
