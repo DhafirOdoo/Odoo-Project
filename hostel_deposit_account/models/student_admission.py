@@ -5,6 +5,9 @@ from odoo.exceptions import ValidationError
 class StudentAdmission(models.Model):
     _inherit = 'dev.student.admission'
 
+
+
+
     # Updated compute method to find liability deposits
     def compute_credit_deposit_count(self):
         for rec in self:
