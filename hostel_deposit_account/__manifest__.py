@@ -6,6 +6,7 @@
     'summary': "Default Deposit Account for Hostel Deposit Payments From Customers",
     'author':"Dhafir Technologies",
     'data': [
-        'views/hostel_settings_view.xml'
+        'views/hostel_settings_view.xml',
+        'wizard/create_deposit_wizard_view_inherit.xml',
     ]
 }

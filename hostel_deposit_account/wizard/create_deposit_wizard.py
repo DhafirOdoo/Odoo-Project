@@ -1,9 +1,10 @@
-from odoo import models, _
+from odoo import fields, models, _
 from odoo.exceptions import ValidationError
 
 class CreateDepositWizard(models.TransientModel):
     _inherit = 'create.deposit'
 
+    journal_id = fields.Many2one('account.journal', string='Journal')
 
     def create_deposit(self):
         active_ids = self._context.get('active_ids')
@@ -26,6 +27,9 @@ class CreateDepositWizard(models.TransientModel):
             'admission_id': student_admission.id,
 
         }
+
+        if self.journal_id:
+            vals['journal_id'] = self.journal_id.id
 
         payment = self.env['account.payment'].create(vals)
         student_admission.deposit_created = True
