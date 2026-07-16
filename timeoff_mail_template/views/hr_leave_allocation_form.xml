@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="hr_leave_allocation_form_inherit" model="ir.ui.view">
+    <field name="name">hr.leave.allocation.form.inherit</field>
+    <field name="model">hr.leave.allocation</field>
+    <field name="inherit_id" ref="hr_holidays.hr_leave_allocation_view_form"/>
+    <field name="arch" type="xml">
+        <xpath expr="//sheet" position="inside">
+            <field name="can_edit" invisible="1"/>
+        </xpath>
+        <xpath expr="//field[@name='notes']" position="attributes">
+            <attribute name="required">1</attribute>
+        </xpath>
+         <xpath expr="//field[@name='number_of_days_display']" position="attributes">
+            <attribute name="readonly">not can_edit</attribute>
+        </xpath>
+         <xpath expr="//field[@name='notes']" position="attributes">
+            <attribute name="readonly">not can_edit</attribute>
+        </xpath>
+        <xpath expr="//field[@name='holiday_status_id']" position="attributes">
+            <attribute name="readonly">not can_edit</attribute>
+        </xpath>
+    </field>
+    </record>
+</odoo>
