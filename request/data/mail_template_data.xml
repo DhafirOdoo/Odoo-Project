@@ -4,7 +4,7 @@
         <record id="employee_request_approver_mail" model="mail.template">
             <field name="name">Employee Request Submit</field>
             <field name="model_id" ref="request.model_employee_request"/>
-            <field name="subject">{{ object.request_type_id.request_name}} submitted by {{ object.employee_id.name}} [Dhafir INDIA]</field>
+            <field name="subject">{{ object.request_type_id.request_name}} Submitted by {{ object.employee_id.name}} [Dhafir INDIA]</field>
             <field name="email_from">{{ object.employee_id.work_email }}</field>
             <field name="email_to">{{ object.request_type_id.approver_id.work_email }}</field>
             <field name="body_html" type="html">

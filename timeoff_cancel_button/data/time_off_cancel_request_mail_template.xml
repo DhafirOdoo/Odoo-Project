@@ -4,7 +4,7 @@
         <record id="time_off_cancel_request_template" model="mail.template">
             <field name="name">Leave Cancel Request Template</field>
             <field name="model_id" ref="hr_holidays.model_hr_leave"/>
-            <field name="subject">{{ object.holiday_status_id.name }} cancellation request from {{ object.employee_id.name }}</field>
+            <field name="subject">{{ object.holiday_status_id.name }} Cancellation Request from {{ object.employee_id.name }}</field>
             <field name="email_to">{{ object.employee_id.leave_manager_id.work_email }}</field>
             <field name="email_from">{{ object.employee_id.work_email }}</field>
             <field name="body_html" type="html">
@@ -15,7 +15,7 @@
                     </p>
                     <p>
                         <t t-out="object.employee_id.name"/>
-                        is requested for the cancellation of
+                        has requested the cancellation of
                         <t t-out="object.holiday_status_id.name"/>
                         applied on <t t-out="object.create_date.strftime('%d/%m/%y')"/>
                     </p>
