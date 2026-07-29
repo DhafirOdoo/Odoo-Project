@@ -73,7 +73,6 @@ class EmployeeRequest(models.Model):
             domain = [
                 ('employee_id', '=', rec.employee_id.id),
                 ('status', '=', 'approved'),
-                ('request_type_id', '=', rec.request_type_id.id),
             ]
             if rec._origin.id:
                 domain.append(('id', '<', rec._origin.id))
