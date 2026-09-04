@@ -1,6 +1,8 @@
+from dateutil.rrule import weekday
 from docutils.nodes import option
 
 from odoo import api, fields, models
+from odoo.api import onchange
 from odoo.exceptions import UserError
 
 
@@ -15,6 +17,7 @@ class EmployeeRequest(models.Model):
         string='Employee',
         default=lambda self: self.env.user.employee_id,
         required=True, readonly=True)
+    user_id = fields.Many2one(related='employee_id.user_id')
     req_reason = fields.Text(string='Description')
     login_date_time = fields.Date(
         string='Date',
@@ -25,6 +28,7 @@ class EmployeeRequest(models.Model):
         ('draft', 'Draft'),
         ('submitted', 'Submitted'),
         ('approved', 'Approved'),
+        ('compensated', 'Compensated'),
         ('rejected', 'Rejected'),
     ], default='draft')
     request_type_id = fields.Many2one(
@@ -54,6 +58,14 @@ class EmployeeRequest(models.Model):
         string="Reason/Description",
         compute="_compute_display_note"
     )
+    compensate_date = fields.Date(
+        'Compensated On'
+    )
+    from_time = fields.Float(string='From')
+    to_time = fields.Float(string='To')
+    late_duration = fields.Float('Late Duration', compute='_compute_late_duration', readonly=True)
+    early_duration = fields.Float('Duration', compute='_compute_early_duration', readonly=True)
+    compensate_duration = fields.Float('Compensate Duration', compute='_compute_compensate_duration',readonly=True, store=True)
 
     @api.depends('req_reason', 'login_reason')
     def _compute_display_note(self):
@@ -72,7 +84,7 @@ class EmployeeRequest(models.Model):
 
             domain = [
                 ('employee_id', '=', rec.employee_id.id),
-                ('status', '=', 'approved'),
+                ('status', 'in', ['approved', 'compensated']),
             ]
             if rec._origin.id:
                 domain.append(('id', '<', rec._origin.id))
@@ -105,7 +117,6 @@ class EmployeeRequest(models.Model):
                 'mail.mail_activity_data_todo',
                 user_id=rec.approver_id.user_id.id,
             )
-
 
     def button_approve(self):
         for rec in self:
@@ -141,3 +152,71 @@ class EmployeeRequest(models.Model):
                 body=f"Your {rec.request_type_id.request_name} has been rejected.",
                 partner_ids=[requester_user.partner_id.id]
             )
+
+
+    @onchange('late_time')
+    def _compute_late_duration(self):
+        for rec in self:
+            rec.late_duration = 0.0
+            calendar = rec.employee_id.resource_calendar_id
+
+            if not calendar:
+                continue
+
+            weekday = str(rec.login_date_time.weekday())
+            attendances = calendar.attendance_ids.filtered(lambda a: a.dayofweek == weekday)
+
+            if not attendances:
+                continue
+
+            attendance = attendances.sorted('hour_from')[0]
+            scheduled_minutes = attendance.hour_from
+            if rec.late_time:
+                rec.late_duration = rec.late_time - scheduled_minutes
+
+    @api.depends('from_time','to_time')
+    def _compute_compensate_duration(self):
+        for rec in self:
+            if rec.to_time or rec.from_time:
+                rec.compensate_duration = rec.to_time - rec.from_time
+            else:
+                rec.compensate_duration = 0.0
+
+    @api.onchange('early_time')
+    def _compute_early_duration(self):
+        for rec in self:
+            rec.early_duration = 0.0
+            calendar = rec.employee_id.resource_calendar_id
+
+            if not calendar:
+                continue
+
+            weekday = str(rec.login_date_time.weekday())
+            attendances = calendar.attendance_ids.filtered(lambda a: a.dayofweek == weekday)
+
+            if not attendances:
+                continue
+
+            attendance = attendances.sorted('hour_to')[2]
+            scheduled_minutes = attendance.hour_to
+            if rec.early_time:
+                rec.early_duration = scheduled_minutes - rec.early_time - 12.0
+
+    def button_compensate(self):
+        for rec in self:
+            if rec.from_time <= 0 or rec.to_time <= 0 or not rec.compensate_date:
+                raise UserError("Enter compensated date and time")
+            elif rec.compensate_date < rec.login_date_time:
+                raise UserError("Compensated date cannot be earlier than request date")
+            elif rec.compensate_duration < rec.early_duration or rec.compensate_duration < rec.late_duration:
+                raise UserError("Duration is not enough to compensate")
+            else:
+                rec.status = 'compensated'
+
+    @api.ondelete(at_uninstall=False)
+    def _user_record_deletion(self):
+        if self.env.user.has_group('request.request_admin'):
+            return
+
+        if any(record.status in ['approved', 'compensated'] for record in self):
+            raise UserError("You cannot delete an approved or compensated record.")
