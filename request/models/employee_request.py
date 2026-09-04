@@ -65,7 +65,9 @@ class EmployeeRequest(models.Model):
     to_time = fields.Float(string='To')
     late_duration = fields.Float('Late Duration', compute='_compute_late_duration', readonly=True)
     early_duration = fields.Float('Duration', compute='_compute_early_duration', readonly=True)
-    compensate_duration = fields.Float('Compensate Duration', compute='_compute_compensate_duration',readonly=True, store=True)
+    compensate_duration = fields.Float('Compensate Duration', compute='_compute_compensate_duration',
+                                       readonly=True, store=True)
+    display_time = fields.Float(string="Login/Exit Time", compute="_compute_display_time")
 
     @api.depends('req_reason', 'login_reason')
     def _compute_display_note(self):
@@ -220,3 +222,9 @@ class EmployeeRequest(models.Model):
 
         if any(record.status in ['approved', 'compensated'] for record in self):
             raise UserError("You cannot delete an approved or compensated record.")
+
+    @api.depends('late_time', 'early_time')
+    def _compute_display_time(self):
+        for rec in self:
+            # Fallback logic: Use Field A if present, otherwise Field B, otherwise empty string
+            rec.display_time = rec.late_time or rec.early_time or ""

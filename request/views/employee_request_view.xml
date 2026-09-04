@@ -99,6 +99,7 @@
                                         <field name="login_date_time"/>
                                         <field name="request_type_id"/>
                                         <field name="display_note"/>
+                                        <field name="display_time" widget="float_time" class="text-warning pe-3"/>
                                         <field name="status"  decoration-success="status == 'compensated'"/>
                                         <field name="compensate_date"
                                                decoration-success="status == 'compensated'"/>
