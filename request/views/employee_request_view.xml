@@ -13,6 +13,7 @@
                            decoration-success="status == 'approved'"
                            decoration-danger="status == 'rejected'"
                            decoration-info="status == 'submitted'"
+                           decoration-primary="status == 'compensated'"
                            decoration-muted="status == 'draft'"/>
                 </tree>
             </field>
@@ -29,12 +30,15 @@
                                 invisible="status != 'submitted'" groups="request.request_approver"/>
                         <button name="button_reject" string="Reject" type="object" invisible="status !='submitted'"
                                 groups="request.request_approver"/>
+                        <button name="button_compensate" class="btn btn-primary" string="Compensate" type="object"
+                                invisible="status !='approved' or user_id != uid or (not is_early and not is_late)"/>
                         <field name="status" widget="statusbar" statusbar_visible="draft,submitted,approved,rejected"/>
                     </header>
                     <sheet>
                         <group>
                             <group>
                                 <field name="employee_id"/>
+                                <field name="user_id" invisible="1"/>
                                 <field name="request_type_id" options="{'no_create': True}"
                                        readonly="status != 'draft'"/>
                                 <field name="req_reason"
@@ -50,16 +54,42 @@
                                 <field name="login_date_time" options="{'minuteStep': 1}"
                                        readonly="status != 'draft'"/>
                                 <field name="is_late" invisible="1"/>
-                                <field name="late_time"
+                                <label for="late_time" string="Late Login Time" invisible="not is_late"/>
+                                <div class="o_row" invisible="not is_late">
+                                    <field name="late_time"
                                        invisible="not is_late"
                                        widget="float_time"
-                                       readonly="status != 'draft'"/>
+                                       readonly="status != 'draft'" class="oe_inline"/>
+                                    <span class="text-warning">Total Duration</span>
+                                    <field name="late_duration" widget="float_time"
+                                           readonly="status != 'draft'"
+                                           class="oe_inline text-warning"/>
+                                </div>
                                 <field name="is_early" invisible="1"/>
-                                <field name="early_time"
+                                <label for="early_time" string="Early Exit Time" invisible="not is_early"/>
+                                <div class="o_row" invisible="not is_early">
+                                    <field name="early_time"
                                        invisible="not is_early"
                                        widget="float_time"
+                                       class="oe_inline"
                                        readonly="status != 'draft'"/>
+                                    <span class="text-warning">Total Duration</span>
+                                    <field name="early_duration"
+                                           class="oe_inline text-warning"
+                                           readonly="status != 'draft'"
+                                           widget="float_time"/>
+                                </div>
+                                <field name="compensate_date" invisible="status in ['draft','submitted','rejected'] or (not is_early and not is_late)" readonly="status =='compensated'"/>
+                                <label for="from_time" string="Compensated From" invisible="status in ['draft','submitted','rejected'] or (not is_early and not is_late)"/>
+                                <div class="o_row" invisible="status in ['draft','submitted','rejected'] or (not is_early and not is_late)">
+                                    <field name="from_time" widget="float_time" class="oe_inline" readonly="status =='compensated'"/>
+                                    <span> <b>To</b> </span>
+                                    <field name="to_time" widget="float_time" class="oe_inline" readonly="status =='compensated'"/>
+                                    <span class="text-success">Total</span>
+                                    <field name="compensate_duration" widget="float_time" class="oe_inline text-success"/>
+                                </div>
                                 <field name="approver_id"/>
+
                             </group>
                         </group>
                         <notebook>
@@ -69,7 +99,16 @@
                                         <field name="login_date_time"/>
                                         <field name="request_type_id"/>
                                         <field name="display_note"/>
-                                        <field name="status"/>
+                                        <field name="display_time" widget="float_time" class="text-warning pe-3"/>
+                                        <field name="status"  decoration-success="status == 'compensated'"/>
+                                        <field name="compensate_date"
+                                               decoration-success="status == 'compensated'"/>
+                                        <field name="from_time" widget="float_time"
+                                               decoration-success="status == 'compensated'"
+                                               decoration-danger="status == 'approved'"/>
+                                        <field name="to_time" widget="float_time"
+                                               decoration-success="status == 'compensated'"
+                                               decoration-danger="status == 'approved'"/>
                                     </tree>
                                 </field>
                             </page>
@@ -91,8 +130,16 @@
                     <field name="request_type_id"/>
                     <field name="login_date_time"/>
                     <filter name="to_approve"
+                            string="To Approve or Compensate"
+                            domain="[('status', 'in', ['submitted', 'draft', 'approved']),
+                            ('create_date', '>=','2026-09-05')]"/>
+                    <filter name="to_approve_manager"
                             string="To Approve"
-                            domain="['|',('status','=','submitted'),('status','=','draft')]"/>
+                            invisible="1"
+                            domain="[('status', 'in', ['submitted', 'draft'])]"/>
+                    <filter name="compensated"
+                            string="Compensated"
+                            domain="[('status','=','compensated')]"/>
                     <separator/>
                     <group>
                         <filter name="group_employee"
@@ -115,8 +162,8 @@
             <field name="res_model">employee.request</field>
             <field name="view_mode">tree,form</field>
             <field name="search_view_id" ref="employee_request_search"/>
-            <field name="context">{'search_default_to_approve':1}</field>
-            <field name="domain">[('status', 'in', ['submitted', 'approved', 'rejected'])]</field>
+            <field name="context">{'search_default_to_approve_manager':1}</field>
+            <field name="domain">[('status', 'in', ['submitted', 'approved', 'rejected','compensated'])]</field>
         </record>
     </data>
 </odoo>
