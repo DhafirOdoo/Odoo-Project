@@ -130,7 +130,8 @@
                     <field name="login_date_time"/>
                     <filter name="to_approve"
                             string="To Approve or Compensate"
-                            domain="[('status', 'in', ['submitted', 'draft', 'approved'])]"/>
+                            domain="[('status', 'in', ['submitted', 'draft', 'approved']),
+                            ('create_date', '>=','2026-09-05')]"/>
                     <filter name="to_approve_manager"
                             string="To Approve"
                             invisible="1"
