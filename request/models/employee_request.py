@@ -68,6 +68,10 @@ class EmployeeRequest(models.Model):
     compensate_duration = fields.Float('Compensate Duration', compute='_compute_compensate_duration',
                                        readonly=True, store=True)
     display_time = fields.Float(string="Login/Exit Time", compute="_compute_display_time")
+    day_period = fields.Selection([
+        ('morning','Morning'),
+        ('afternoon','Afternoon'),
+    ])
 
     @api.depends('req_reason', 'login_reason')
     def _compute_display_note(self):
@@ -156,7 +160,7 @@ class EmployeeRequest(models.Model):
             )
 
 
-    @onchange('late_time')
+    @onchange('late_time','day_period')
     def _compute_late_duration(self):
         for rec in self:
             rec.late_duration = 0.0
@@ -171,10 +175,18 @@ class EmployeeRequest(models.Model):
             if not attendances:
                 continue
 
-            attendance = attendances.sorted('hour_from')[0]
-            scheduled_minutes = attendance.hour_from
-            if rec.late_time:
-                rec.late_duration = rec.late_time - scheduled_minutes
+            if rec.day_period == 'morning':
+                attendance = attendances.sorted('hour_from')[0]
+                scheduled_minutes = attendance.hour_from
+                if rec.late_time:
+                    rec.late_duration = rec.late_time - scheduled_minutes
+            elif rec.day_period == 'afternoon':
+                attendance = attendances.sorted('hour_from')[2]
+                scheduled_minutes = attendance.hour_from
+                if rec.late_time:
+                    rec.late_duration = rec.late_time - scheduled_minutes + 12.00
+            # elif not rec.day_period :
+            #         raise UserError("Choose Day Period")
 
     @api.depends('from_time','to_time')
     def _compute_compensate_duration(self):
@@ -184,7 +196,7 @@ class EmployeeRequest(models.Model):
             else:
                 rec.compensate_duration = 0.0
 
-    @api.onchange('early_time')
+    @api.onchange('early_time','day_period')
     def _compute_early_duration(self):
         for rec in self:
             rec.early_duration = 0.0
@@ -199,10 +211,18 @@ class EmployeeRequest(models.Model):
             if not attendances:
                 continue
 
-            attendance = attendances.sorted('hour_to')[2]
-            scheduled_minutes = attendance.hour_to
-            if rec.early_time:
-                rec.early_duration = scheduled_minutes - rec.early_time - 12.0
+            if rec.day_period == 'afternoon':
+                attendance = attendances.sorted('hour_to')[2]
+                scheduled_minutes = attendance.hour_to
+                if rec.early_time:
+                    rec.early_duration = scheduled_minutes - rec.early_time - 12.0
+            elif rec.day_period == 'morning':
+                attendance = attendances.sorted('hour_to')[0]
+                scheduled_minutes = attendance.hour_to
+                if rec.early_time:
+                    rec.early_duration = scheduled_minutes - rec.early_time
+            # elif not rec.day_period :
+            #     raise UserError("Choose Day Period")
 
     def button_compensate(self):
         for rec in self:

@@ -7,4 +7,4 @@ access_request_type_approver,access_request_type_approver,model_request_type,req
 
 
 access_employee_request_user,access_employee_request_user,model_employee_request,request_user,1,1,1,1
-access_request_type_user,access_request_type_user,model_request_type,request_user,1,1,1,1
+access_request_type_user,access_request_type_user,model_request_type,request_user,1,0,0,0
