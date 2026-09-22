@@ -230,8 +230,8 @@ class EmployeeRequest(models.Model):
                 raise UserError("Enter compensated date and time")
             elif rec.compensate_date < rec.login_date_time:
                 raise UserError("Compensated date cannot be earlier than request date")
-            elif rec.compensate_duration < rec.early_duration or rec.compensate_duration < rec.late_duration:
-                raise UserError("Duration is not enough to compensate")
+            # elif rec.compensate_duration < rec.early_duration or rec.compensate_duration < rec.late_duration:
+            #     raise UserError("Duration is not enough to compensate")
             else:
                 rec.status = 'compensated'
 
