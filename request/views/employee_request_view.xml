@@ -41,6 +41,7 @@
                                 <field name="user_id" invisible="1"/>
                                 <field name="request_type_id" options="{'no_create': True}"
                                        readonly="status != 'draft'"/>
+                                <field name="day_period" invisible="not (is_late or is_early)" readonly="status != 'draft'" required="1"/>
                                 <field name="req_reason"
                                        invisible="is_late or is_early"
                                        readonly="status != 'draft'"
@@ -100,6 +101,7 @@
                                         <field name="request_type_id"/>
                                         <field name="display_note"/>
                                         <field name="display_time" widget="float_time" class="text-warning pe-3"/>
+                                        <field name="day_period"/>
                                         <field name="status"  decoration-success="status == 'compensated'"/>
                                         <field name="compensate_date"
                                                decoration-success="status == 'compensated'"/>
