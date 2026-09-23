@@ -41,7 +41,7 @@
                                 <field name="user_id" invisible="1"/>
                                 <field name="request_type_id" options="{'no_create': True}"
                                        readonly="status != 'draft'"/>
-                                <field name="day_period" invisible="not (is_late or is_early)" readonly="status != 'draft'"/>
+                                <field name="day_period" invisible="not (is_late or is_early)" readonly="status != 'draft'" required="1"/>
                                 <field name="req_reason"
                                        invisible="is_late or is_early"
                                        readonly="status != 'draft'"
