@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="employee_request_compensate_tree" model="ir.ui.view">
+            <field name="name">employee.request.compensate.tree</field>
+            <field name="model">employee.request.compensate</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="date"/>
+                    <field name="from_time" widget="float_time"/>
+                    <field name="to_time" widget="float_time"/>
+                    <field name="total_compensated" widget="float_time" sum="Total"/>
+                </tree>
+            </field>
+        </record>
+        <record id="employee_request_compensate_form" model="ir.ui.view">
+            <field name="name">employee.request.compensate.form</field>
+            <field name="model">employee.request.compensate</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="date"/>
+                            </group>
+                            <group>
+                                <field name="from_time" widget="float_time"/>
+                                <field name="to_time" widget="float_time"/>
+                                <field name="total_compensated" widget="float_time"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

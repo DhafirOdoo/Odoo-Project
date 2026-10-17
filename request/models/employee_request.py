@@ -60,18 +60,24 @@ class EmployeeRequest(models.Model):
     )
     compensate_date = fields.Date(
         'Compensated On'
-    )
-    from_time = fields.Float(string='From')
-    to_time = fields.Float(string='To')
+    )# Deprecated
+    from_time = fields.Float(string='From')# Deprecated
+    to_time = fields.Float(string='To')# Deprecated
     late_duration = fields.Float('Late Duration', compute='_compute_late_duration', readonly=True)
     early_duration = fields.Float('Duration', compute='_compute_early_duration', readonly=True)
     compensate_duration = fields.Float('Compensate Duration', compute='_compute_compensate_duration',
-                                       readonly=True, store=True)
+                                       readonly=True, store=True)# Deprecated
     display_time = fields.Float(string="Login/Exit Time", compute="_compute_display_time")
     day_period = fields.Selection([
         ('morning','Morning'),
         ('afternoon','Afternoon'),
     ])
+    compensate_line_ids = fields.One2many('employee.request.compensate','employee_request_id')
+    total_compensated = fields.Float(
+        string='Total Compensated',
+        compute='_compute_total_compensated',
+    )
+    is_request_admin = fields.Boolean(compute='_compute_is_request_admin')
 
     @api.depends('req_reason', 'login_reason')
     def _compute_display_note(self):
@@ -87,11 +93,24 @@ class EmployeeRequest(models.Model):
             if not rec.employee_id:
                 rec.previous_request_ids = False
                 continue
-
             domain = [
                 ('employee_id', '=', rec.employee_id.id),
                 ('status', 'in', ['approved', 'compensated']),
             ]
+            if rec.is_early or rec.is_late:
+                domain += [
+                    '|',
+                    ('is_late', '=', True),
+                    ('is_early', '=', True),
+                ]
+            elif rec.request_type_id:
+                domain.append(
+                    ('request_type_id', '=', rec.request_type_id.id)
+                )
+            else:
+                rec.previous_request_ids = False
+                continue
+
             if rec._origin.id:
                 domain.append(('id', '<', rec._origin.id))
 
@@ -185,16 +204,7 @@ class EmployeeRequest(models.Model):
                 scheduled_minutes = attendance.hour_from
                 if rec.late_time:
                     rec.late_duration = rec.late_time - scheduled_minutes + 12.00
-            # elif not rec.day_period :
-            #         raise UserError("Choose Day Period")
 
-    @api.depends('from_time','to_time')
-    def _compute_compensate_duration(self):
-        for rec in self:
-            if rec.to_time or rec.from_time:
-                rec.compensate_duration = rec.to_time - rec.from_time
-            else:
-                rec.compensate_duration = 0.0
 
     @api.onchange('early_time','day_period')
     def _compute_early_duration(self):
@@ -221,19 +231,6 @@ class EmployeeRequest(models.Model):
                 scheduled_minutes = attendance.hour_to
                 if rec.early_time:
                     rec.early_duration = scheduled_minutes - rec.early_time
-            # elif not rec.day_period :
-            #     raise UserError("Choose Day Period")
-
-    def button_compensate(self):
-        for rec in self:
-            if rec.from_time <= 0 or rec.to_time <= 0 or not rec.compensate_date:
-                raise UserError("Enter compensated date and time")
-            elif rec.compensate_date < rec.login_date_time:
-                raise UserError("Compensated date cannot be earlier than request date")
-            # elif rec.compensate_duration < rec.early_duration or rec.compensate_duration < rec.late_duration:
-            #     raise UserError("Duration is not enough to compensate")
-            else:
-                rec.status = 'compensated'
 
     @api.ondelete(at_uninstall=False)
     def _user_record_deletion(self):
@@ -248,3 +245,57 @@ class EmployeeRequest(models.Model):
         for rec in self:
             # Fallback logic: Use Field A if present, otherwise Field B, otherwise empty string
             rec.display_time = rec.late_time or rec.early_time or ""
+
+
+
+    def add_compensatory_details(self):
+        self.ensure_one()
+
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Add Compensatory Details',
+            'res_model': 'employee.request.compensate',
+            'view_mode': 'tree',
+            'view_id': self.env.ref('request.employee_request_compensate_tree').id,
+            'target': 'new',
+            'domain': [
+                ('employee_request_id', '=', self.id),
+            ],
+            'context': {
+                'default_employee_request_id': self.id,
+            }
+        }
+
+
+    def button_compensated(self):
+        #validates and changes status of the record
+        for rec in self:
+            compensation_records = self.env[
+                'employee.request.compensate'
+            ].search([
+                ('employee_request_id', '=', rec.id),
+            ])
+
+            total_compensated = sum(
+                compensation_records.mapped('total_compensated')
+            )
+            required_duration = rec.early_duration or rec.late_duration
+
+            if required_duration and total_compensated < required_duration:
+                raise UserError("Compensated time is not enough")
+
+            else:
+                rec.status = 'compensated'
+
+    @api.depends('compensate_line_ids.total_compensated')
+    def _compute_total_compensated(self):
+        #sum total compensated time added by user
+        for rec in self:
+            rec.total_compensated = sum(
+                rec.compensate_line_ids.mapped('total_compensated')
+            )
+
+    def _compute_is_request_admin(self):
+        for record in self:
+            # Checks if the current user belongs to your custom admin group
+            record.is_request_admin = self.env.user.has_group('request.request_admin')

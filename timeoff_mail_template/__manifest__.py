@@ -2,6 +2,7 @@
     'name': 'Custom Time Off Mail Template',
     'version': '17.0.1.0.1',
     'depends': ['mail', 'hr_holidays'],
+    'license': 'LGPL-3',
     'installable': True,
     'author': 'Dhafir Technologies',
     'summary': 'Custom Mail Template For Leave Request E-mail',

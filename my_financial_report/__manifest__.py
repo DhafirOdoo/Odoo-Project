@@ -3,6 +3,7 @@
     'version': '1.0',
     'depends': ['account', 'sale', 'account_check_printing',
                 'base_account_budget', 'analytic','base_accounting_kit','base','report_xlsx'],
+    'license': 'LGPL-3',
     'installable': True,
     'data': [
         'security/ir.model.access.csv',

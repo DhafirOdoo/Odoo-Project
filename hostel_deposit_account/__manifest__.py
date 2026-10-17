@@ -2,6 +2,7 @@
     'name': 'Hostel Deposit Account',
     'version': '17.0.1.0.0',
     'depends': ['dev_hostel_management'],
+    'license': 'LGPL-3',
     'installable': True,
     'summary': "Default Deposit Account for Hostel Deposit Payments From Customers",
     'author':"Dhafir Technologies",

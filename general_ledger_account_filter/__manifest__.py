@@ -1,6 +1,7 @@
 {
     'name': 'General Ledger Account Filter',
     'depends': ['account','base','base_accounting_kit'],
+    'license': 'LGPL-3',
     'summary': 'Enable Account Filter for General Ledger Report',
     'installable': True,
     'application': True,

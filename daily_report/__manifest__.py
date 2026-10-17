@@ -2,6 +2,7 @@
     'name': 'Daily Report',
     'version': '17.0.1.0.0',
     'depends': ['base','hr','mail'],
+    'license': 'LGPL-3',
     'installable': True,
     'application': True,
     'summary': 'Employee Daily Work Report Submission',
