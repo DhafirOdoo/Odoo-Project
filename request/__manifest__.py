@@ -1,7 +1,8 @@
 {
     'name': 'Employee Request',
-    'version': '17.0.1.0.3',
+    'version': '17.0.1.0.4',
     'depends': ['base', 'mail', 'hr'],
+    'license': 'LGPL-3',
     'summary':'Employee Can Submit Various Requests',
     'author':'Dhafir Technologies',
     'installable': True,
@@ -13,6 +14,7 @@
         'security/ir.model.access.csv',
         'views/employee_request_view.xml',
         'views/request_type_view.xml',
+        'views/employee_request_compensate_view.xml',
         'views/request_menus.xml'
     ]
 

@@ -1,6 +1,7 @@
 {
     'name': 'Custom Expense',
     'version': '17.0.1.0.0',
+    'license': 'LGPL-3',
     'installable': True,
     'author': 'Dhafir Technologies',
     'depends':['hr_expense'],

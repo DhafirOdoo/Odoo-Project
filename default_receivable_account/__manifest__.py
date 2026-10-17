@@ -1,6 +1,7 @@
 {
     'name': 'Default Receivable Account',
     'depends': ['base','account','base_accounting_kit','base_account_budget'],
+    'license': 'LGPL-3',
     'summary': 'Default Receivable Account for Partners',
     'author' : 'Dhafir Technologies',
     'installable': True,

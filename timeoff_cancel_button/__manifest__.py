@@ -2,6 +2,7 @@
     'name': 'Time Off Cancel Request',
     'version': '17.0.1.0.0',
     'depends': ['base', 'hr'],
+    'license': 'LGPL-3',
     'installable': True,
     'author': 'Dhafir Technologies',
     'summary': 'Time off Cancel Access to Admin Only',
